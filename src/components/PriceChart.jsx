@@ -31,7 +31,12 @@ function PriceChart({ data, isLoading }) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="timestamp" />
           <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-          <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+          <YAxis 
+            yAxisId="right" 
+            orientation="right" 
+            stroke="#82ca9d" 
+            domain={[-1, 1]}
+          />
           <Tooltip />
           <Legend />
           <Line

@@ -34,6 +34,30 @@ function Dashboard() {
     )
   }
 
+  // Collect all posts from all timestamps and remove duplicates
+  const allPosts = data?.data?.flatMap(point => point.topPosts || []) || []
+  const uniquePosts = Array.from(
+    new Map(allPosts.map(post => [post.id, post])).values()
+  )
+  
+  // Sort posts by absolute sentiment score and then by score
+  const sortedPosts = [...uniquePosts].sort((a, b) => {
+    // First sort by absolute sentiment (strongest sentiment first)
+    const sentimentDiff = Math.abs(b.sentiment) - Math.abs(a.sentiment)
+    if (sentimentDiff !== 0) return sentimentDiff
+    // If sentiments are equal in magnitude, sort by score
+    return b.score - a.score
+  })
+
+  // Split into positive and negative posts
+  const positivePosts = sortedPosts
+    .filter(post => post.sentiment > 0)
+    .slice(0, 5)
+
+  const negativePosts = sortedPosts
+    .filter(post => post.sentiment < 0)
+    .slice(0, 5)
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -56,7 +80,7 @@ function Dashboard() {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4">Top Positive Posts</h2>
           <TopPosts
-            posts={data?.data?.[0]?.topPosts?.filter(post => post.sentiment > 0) || []}
+            posts={positivePosts}
             isLoading={isLoading}
           />
         </div>
@@ -64,7 +88,7 @@ function Dashboard() {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4">Top Negative Posts</h2>
           <TopPosts
-            posts={data?.data?.[0]?.topPosts?.filter(post => post.sentiment < 0) || []}
+            posts={negativePosts}
             isLoading={isLoading}
           />
         </div>
