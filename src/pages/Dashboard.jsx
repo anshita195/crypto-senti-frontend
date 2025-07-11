@@ -50,13 +50,8 @@ function Dashboard() {
   })
 
   // Split into positive and negative posts
-  const positivePosts = sortedPosts
-    .filter(post => post.sentiment > 0)
-    .slice(0, 5)
-
-  const negativePosts = sortedPosts
-    .filter(post => post.sentiment < 0)
-    .slice(0, 5)
+  const positivePosts = sortedPosts.filter(post => post.sentiment > 0);
+  const negativePosts = sortedPosts.filter(post => post.sentiment < 0);
 
   return (
     <div className="space-y-8">
